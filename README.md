@@ -226,3 +226,7 @@ Rule: **each person owns their layer**. Cross‑layer changes require alignment.
 * Clear async architecture using managed services
 * Real, transferable backend experience
 * A finished artifact, not a prototype sketch
+
+## Tools
+
+* https://excalidraw.com/#json=UcrQBFQfgFpRKAeid54oW,FEE_3qEBOA7sLC221tOpxQ
