@@ -263,3 +263,7 @@ This project demonstrates:
 
 BatchLab is not a tutorial. It is a **real engineering artifact delivered under constraints**.
 
+## 13. Tools
+
+- System Designing: https://excalidraw.com/#json=5q1900ZLeO1h97Tdn99rS,YCkLMXxGnJbX4AlIcp7Y-Q
+
