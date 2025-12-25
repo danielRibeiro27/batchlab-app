@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>batchlab_api</RootNamespace>
+    <RootNamespace>BatchlabApi</RootNamespace>
   </PropertyGroup>
 
 </Project>
