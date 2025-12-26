@@ -598,3 +598,4 @@ BatchLab is not a tutorial. It is a **real engineering artifact delivered under 
 - SQS code example: https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/dotnetv3/SQS
 - SQS setting up: https://docs.aws.amazon.com/en_us/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-setting-up.html
 - SQS api reference: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html
+- SQS api doc: https://docs.aws.amazon.com/sdkfornet/v4/apidocs/items/SQS/NSQS.html
