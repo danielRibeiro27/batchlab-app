@@ -32,16 +32,18 @@ dotnet run
 cd Backend/batchlab-api
 # The Worker may be part of the same project or a separate project
 # Currently shares the same directory as the API
+# For the current setup, the worker will need to be implemented as:
+# 1. A background service within the same process, or
+# 2. A separate launch profile (to be added to launchSettings.json), or
+# 3. A separate project (future enhancement)
 # Check Program.cs for the actual implementation
-dotnet run --launch-profile Worker  # If using separate launch profile
-# Or run as a separate project when available
 ```
 
-**For development**, run both in separate terminal sessions:
-- Terminal 1: API (`dotnet run` or `dotnet run --launch-profile Api`)
-- Terminal 2: Worker (check actual implementation in Program.cs for correct command)
+**For development**, run both in separate terminal sessions once Worker is implemented:
+- Terminal 1: API (`dotnet run` or `dotnet run --launch-profile http`)
+- Terminal 2: Worker (implementation-specific command - check Program.cs)
 
-**Note**: The API and Worker may share the same codebase but run as separate processes to handle different responsibilities (API endpoints vs. SQS message consumption).
+**Note**: The API and Worker may share the same codebase but run as separate processes to handle different responsibilities (API endpoints vs. SQS message consumption). The Worker component is part of the planned architecture and needs to be implemented.
 
 #### Testing
 ```bash
@@ -55,7 +57,7 @@ cd Frontend
 npm install
 npm run build
 npm start        # Runs ng serve
-npm test         # Runs Vitest tests
+npm test         # Runs ng test (uses Vitest as configured in package.json)
 ```
 
 ## AWS Configuration
