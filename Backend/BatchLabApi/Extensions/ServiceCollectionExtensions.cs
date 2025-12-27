@@ -16,6 +16,8 @@ namespace BatchLabApi.Extensions
         public static IServiceCollection AddJobApplicationInfrastructures(this IServiceCollection services)
         {
             services.AddScoped<IMessageBus, SQSMessageBus>();
+            services.AddScoped<IJobsRepository, JsonFileRepository>(provider => 
+                new JsonFileRepository("jobs.json"));
             return services;
         }
     }

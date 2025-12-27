@@ -1,5 +1,9 @@
-﻿using Amazon.SQS;
+﻿using System.Runtime.CompilerServices;
+using System.Text.Json;
+using Amazon.SQS;
 using Amazon.SQS.Model;
+using BatchLabWorker.Domain;
+using BatchLabWorker.Infrastructure;
 
 //TO-DO: Move AWS config to appsettings.json
 //TO-DO: Use interface for AWS client?
@@ -24,15 +28,45 @@ while(true){
         {
             //TO-DO: Add error handling (try-catch) around message processing and deletion to prevent message loss and worker crashes
             Console.WriteLine("Message received: " + message.Body); //TO-DO: Process the message (e.g., perform the job)
+
+            JobEntity jobEntity = JsonSerializer.Deserialize<JobEntity>(message.Body)!;
+            FakeProcessJob(jobEntity);
+            jobEntity.Status = "Completed";
+
+            var _repository = new JsonFileRepository("../BatchLabApi/jobs.json");
+            if(await _repository.GetByIdAsync(jobEntity.Id.ToString()) == null)
+            {
+                await _repository.CreateAsync(jobEntity);
+                Console.WriteLine("Job created in repository: " + jobEntity.Id);
+            }
+            else
+            {
+                _ = await _repository.UpdateAsync(jobEntity);
+                Console.WriteLine("Job updated in repository: " + jobEntity.Id);
+            }
+
+
             var deleteMessageRequest = new DeleteMessageRequest
             {
                 QueueUrl = queueUrl.QueueUrl,
                 ReceiptHandle = message.ReceiptHandle
             };
             await client.DeleteMessageAsync(deleteMessageRequest);
-
-            //TO-DO: Update job status in database
             Console.WriteLine("Message deleted: " + message.MessageId);
         }
+    }
+}
+
+static void FakeProcessJob(JobEntity jobData)
+{
+    //Simulate job processing time
+    Random rand = new Random();
+    int processingTime = rand.Next(1000, 50000); //Random processing time between 1-50 seconds
+    System.Threading.Thread.Sleep(processingTime);
+    Console.WriteLine($"Processed job: {jobData} in {processingTime} ms");
+
+    if(rand.NextDouble() < 0.1) //10% chance to simulate job failure
+    {
+        throw new Exception("Simulated job processing failure.");
     }
 }

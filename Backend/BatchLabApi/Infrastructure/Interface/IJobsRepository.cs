@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using BatchLabApi.Domain;
 
 namespace BatchLabApi.Infrastructure.Interface
 {
-    public interface IJobsRepository<T> where T : class
+    public interface IJobsRepository
     {
-        Task<T?> GetByIdAsync(string id);
-        Task CreateAsync(T entity);
+        Task<JobEntity?> GetByIdAsync(string id);
+        Task CreateAsync(JobEntity entity);
+        Task<List<JobEntity>> GetAllAsync();
     }
 }

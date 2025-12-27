@@ -1,10 +1,9 @@
 using System.Text.Json;
-using BatchLabApi.Infrastructure.Interface;
-using BatchLabApi.Domain;
+using BatchLabWorker.Domain;
 
-namespace BatchLabApi.Infrastructure.Implementation
+namespace BatchLabWorker.Infrastructure
 {
-    public class JsonFileRepository : IJobsRepository
+    public class JsonFileRepository 
     {
         private readonly string _filePath;
         private readonly JsonSerializerOptions _jsonOptions;
@@ -22,10 +21,18 @@ namespace BatchLabApi.Infrastructure.Implementation
             return items.Find(item => GetId(item) == id);
         }
 
-        public async Task<List<JobEntity>> GetAllAsync()
+        public async Task<JobEntity?> UpdateAsync(JobEntity entity)
         {
             var items = await ReadAllAsync();
-            return items;
+            var index = items.FindIndex(item => GetId(item) == GetId(entity));
+            if (index == -1)
+            {
+                return null; // Entity not found
+            }
+
+            items[index] = entity;
+            await WriteAllAsync(items);
+            return entity;
         }
 
         public async Task CreateAsync(JobEntity entity)

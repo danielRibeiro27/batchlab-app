@@ -5,8 +5,8 @@ namespace BatchLabApi.Service.Interface
 {
     public interface IJobApplicationService
     {
-        Task<bool> CreateAsync(JobEntity job);
-        JobEntity Get(int id);
-        IEnumerable<JobEntity> GetAll();
+        Task<bool> PublishAsync(JobEntity job);
+        Task<JobEntity> GetByIdAsync(string id);
+        Task<List<JobEntity>> GetAllAsync();
     }
 }
