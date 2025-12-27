@@ -1,16 +1,14 @@
+using System.Text.Json;
 using Amazon.SQS;
 using Amazon.SQS.Model;
+using BatchLabApi.Domain;
 using BatchLabApi.Infrastructure.Interface;
 
 namespace BatchLabApi.Infrastructure.Implementation
 {
-    public class SQSMessageBus : IMessageBus
+    public class SQSMessageBus() : IMessageBus
     {
-        public SQSMessageBus()
-        {
-        }
-
-        public async Task<bool> PublishAsync(Dto.JobDto jobDto)
+        public async Task<bool> PublishAsync(JobEntity job)
         {
             try
             {
@@ -21,15 +19,17 @@ namespace BatchLabApi.Infrastructure.Implementation
                 var queueUrl = await client.GetQueueUrlAsync("BatchlabJobs"); 
                 Console.WriteLine("Queue: " + queueUrl.QueueUrl);
 
+                string jobJson = JsonSerializer.Serialize(job);
+
                 var sendMessageRequest = new SendMessageRequest()
                 {
                     QueueUrl = queueUrl.QueueUrl,
-                    MessageBody = jobDto.Desc //TO-DO: Serialize full dto
+                    MessageBody = jobJson
                     //TO-DO: Add message attributes if needed
                 };
                 var response = await client.SendMessageAsync(sendMessageRequest);
                 Console.WriteLine("Message sent with ID: " + response.MessageId);
-                return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+                return response?.HttpStatusCode == System.Net.HttpStatusCode.OK;
             }
             catch (Exception ex) //TO-DO: Handle exceptions properly
             {

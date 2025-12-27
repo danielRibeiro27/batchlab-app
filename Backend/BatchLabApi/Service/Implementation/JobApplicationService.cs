@@ -1,23 +1,18 @@
 using BatchLabApi.Dto;
 using BatchLabApi.Service.Interface;
 using BatchLabApi.Infrastructure.Interface;
+using BatchLabApi.Domain;
 
 namespace BatchLabApi.Service.Implementation
 {
-    public class JobApplicationService : IJobApplicationService
+    public class JobApplicationService(IMessageBus messageBus) : IJobApplicationService
     {
-        //TO-DO: Inject message bus via constructor
-        private readonly IMessageBus? _messageBus;
-        public JobApplicationService(IMessageBus? messageBus = null)
-        {
-            _messageBus = messageBus;
-        }
+        private readonly IMessageBus _messageBus = messageBus;
 
-        public async Task<bool> CreateAsync(JobDto job)
+        public async Task<bool> CreateAsync(JobEntity job)
         {
             //TO-DO: Save job to database
-            Infrastructure.Implementation.SQSMessageBus messageBus = new();
-            return await messageBus.PublishAsync(job);
+            return await _messageBus.PublishAsync(job);
         }
 
         public void Delete(int id)
@@ -25,17 +20,17 @@ namespace BatchLabApi.Service.Implementation
             throw new NotImplementedException();
         }
 
-        public JobDto Get(int id)
+        public JobEntity Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<JobDto> GetAll()
+        public IEnumerable<JobEntity> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public void Update(JobDto job)
+        public void Update(JobEntity job)
         {
             throw new NotImplementedException();
         }
