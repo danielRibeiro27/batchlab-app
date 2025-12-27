@@ -1,7 +1,7 @@
 --ambient variables
 $AWS_ACESS_KEY_ID 'queue key id
-$AWS_SECRET_ACESS_KEY 'queue secret key
-$AWS_REGION 'queue region, sa-east1
+$AWS_SECRET_ACCESS_KEY 'queue secret key
+$AWS_REGION 'queue region, sa-east-1
 
 --run api
 export AWS_ACCESS_KEY_ID=$BATCHLAB_API_AWS_ACCESS_KEY_ID
