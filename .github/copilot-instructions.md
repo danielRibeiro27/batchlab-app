@@ -105,6 +105,12 @@ var dynamoDbClient = new AmazonDynamoDBClient(RegionEndpoint.GetBySystemName(reg
 ```csharp
 // ⚠️ WARNING: Never hard-code credentials in source code
 // Only use when loading from secure configuration
+var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") 
+    ?? throw new InvalidOperationException("AWS_ACCESS_KEY_ID not configured");
+var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") 
+    ?? throw new InvalidOperationException("AWS_SECRET_ACCESS_KEY not configured");
+var region = Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
+
 var sqsClient = new AmazonSQSClient(
     new BasicAWSCredentials(accessKey, secretKey),
     RegionEndpoint.GetBySystemName(region)
