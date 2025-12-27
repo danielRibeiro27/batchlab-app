@@ -10,24 +10,27 @@ namespace BatchLabApi.Infrastructure.Implementation
         {
         }
 
-        public async Task<bool> PublishAsync(string message)
+        public async Task<bool> PublishAsync(Dto.JobDto jobDto)
         {
             try
             {
+                //TO-DO: Move AWS config to appsettings.json
+                //TO-DO: Use interface for AWS client?
                 AmazonSQSClient client = new(Amazon.RegionEndpoint.SAEast1);
-                var queueUrl = await client.GetQueueUrlAsync("BatchlabJobs");
+                var queueUrl = await client.GetQueueUrlAsync("BatchlabJobs"); 
                 Console.WriteLine("Queue: " + queueUrl.QueueUrl);
 
                 var sendMessageRequest = new SendMessageRequest()
                 {
                     QueueUrl = queueUrl.QueueUrl,
-                    MessageBody = message
+                    MessageBody = jobDto.Desc //TO-DO: Serialize full dto
+                    //TO-DO: Add message attributes if needed
                 };
                 var response = await client.SendMessageAsync(sendMessageRequest);
                 Console.WriteLine("Message sent with ID: " + response.MessageId);
                 return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
             }
-            catch (Exception ex)
+            catch (Exception ex) //TO-DO: Handle exceptions properly
             {
                 Console.WriteLine($"Error sending message: {ex.Message}");
                 throw;

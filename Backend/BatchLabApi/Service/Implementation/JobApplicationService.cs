@@ -6,6 +6,7 @@ namespace BatchLabApi.Service.Implementation
 {
     public class JobApplicationService : IJobApplicationService
     {
+        //TO-DO: Inject message bus via constructor
         private readonly IMessageBus? _messageBus;
         public JobApplicationService(IMessageBus? messageBus = null)
         {
@@ -14,8 +15,9 @@ namespace BatchLabApi.Service.Implementation
 
         public async Task<bool> CreateAsync(JobDto job)
         {
+            //TO-DO: Save job to database
             Infrastructure.Implementation.SQSMessageBus messageBus = new();
-            return await messageBus.PublishAsync(job.Desc);
+            return await messageBus.PublishAsync(job);
         }
 
         public void Delete(int id)
