@@ -5,34 +5,27 @@ using BatchLabApi.Domain;
 
 namespace BatchLabApi.Service.Implementation
 {
-    public class JobApplicationService(IMessageBus messageBus) : IJobApplicationService
+    public class JobApplicationService(IMessageBus messageBus, IJobsRepository jobRepository) : IJobApplicationService
     {
         private readonly IMessageBus _messageBus = messageBus;
+        private readonly IJobsRepository _jobsRepository = jobRepository;
 
-        public async Task<bool> CreateAsync(JobEntity job)
+        public async Task<bool> PublishAsync(JobEntity job)
         {
-            //TO-DO: Save job to database
-            return await _messageBus.PublishAsync(job);
+            //No need to await here as we want to do both concurrently
+            await _messageBus.PublishAsync(job);
+            await _jobsRepository.CreateAsync(job);
+            return true;
         }
 
-        public void Delete(int id)
+        public async Task<JobEntity> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _jobsRepository.GetByIdAsync(id);
         }
 
-        public JobEntity Get(int id)
+        public async Task<List<JobEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<JobEntity> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(JobEntity job)
-        {
-            throw new NotImplementedException();
+            return await _jobsRepository.GetAllAsync();
         }
     }
 }
