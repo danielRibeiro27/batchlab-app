@@ -60,6 +60,7 @@ while(true){
 static void FakeProcessJob(JobEntity jobData)
 {
     //Simulate job processing time
+    // TODO: Use Random.Shared instead of creating new Random instance for better performance and thread safety
     Random rand = new Random();
     int processingTime = rand.Next(1000, 50000); //Random processing time between 1-50 seconds
     System.Threading.Thread.Sleep(processingTime);
