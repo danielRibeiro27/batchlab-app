@@ -75,7 +75,15 @@ app.MapPost("/jobs", async Task<IResult> ([FromBody]JobDto jobDto, IJobApplicati
     if(!result)
         return Results.StatusCode(500);
 
-    return Results.Created("/jobs", jobDto);
+    var createdJobDto = new JobDto
+    {
+        Id = jobEntity.Id.ToString(),
+        Description = jobEntity.Description,
+        Status = jobEntity.Status,
+        CreatedAt = jobEntity.CreatedAt
+    };
+
+    return Results.Created($"/jobs/{createdJobDto.Id}", createdJobDto);
 });
 
 #endregion
