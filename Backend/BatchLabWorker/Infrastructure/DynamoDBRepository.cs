@@ -3,36 +3,39 @@ using Amazon.DynamoDBv2.Model;
 using BatchLabWorker.Domain;
 using System.Threading.Tasks;
 
-public class DynamoDBRepository
+namespace BatchLabWorker.Infrastructure
 {
-    private readonly IAmazonDynamoDB _dynamoDbClient;
-    private const string TableName = "Jobs";
-
-    public DynamoDBRepository(IAmazonDynamoDB dynamoDbClient)
+    public class DynamoDBRepository
     {
-        _dynamoDbClient = dynamoDbClient;
-    }
+        private readonly IAmazonDynamoDB _dynamoDbClient;
+        private const string TableName = "Jobs";
 
-    public async Task UpdateJobStatusAsync(JobEntity job)
-    {
-        var updateItemRequest = new UpdateItemRequest
+        public DynamoDBRepository(IAmazonDynamoDB dynamoDbClient)
         {
-            TableName = TableName,
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { "Id", new AttributeValue { S = job.Id.ToString() } }
-            },
-            ExpressionAttributeNames = new Dictionary<string, string>
-            {
-                { "#s", "Status" }
-            },
-            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-            {
-                { ":status", new AttributeValue { S = job.Status } }
-            },
-            UpdateExpression = "SET #s = :status"
-        };
+            _dynamoDbClient = dynamoDbClient;
+        }
 
-        await _dynamoDbClient.UpdateItemAsync(updateItemRequest);
+        public async Task UpdateJobStatusAsync(JobEntity job)
+        {
+            var updateItemRequest = new UpdateItemRequest
+            {
+                TableName = TableName,
+                Key = new Dictionary<string, AttributeValue>
+                {
+                    { "Id", new AttributeValue { S = job.Id.ToString() } }
+                },
+                ExpressionAttributeNames = new Dictionary<string, string>
+                {
+                    { "#s", "Status" }
+                },
+                ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+                {
+                    { ":status", new AttributeValue { S = job.Status } }
+                },
+                UpdateExpression = "SET #s = :status"
+            };
+
+            await _dynamoDbClient.UpdateItemAsync(updateItemRequest);
+        }
     }
 }
