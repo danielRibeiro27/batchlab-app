@@ -60,7 +60,7 @@ app.MapGet("/jobs", async (IJobApplicationService _jobService) =>
     return Results.Ok(jobsDto);
 });
 
-app.MapPost("/jobs", async ([FromBody]JobDto jobDto, IJobApplicationService _jobService) =>
+app.MapPost("/jobs", async Task<IResult> ([FromBody]JobDto jobDto, IJobApplicationService _jobService) =>
 {
     if(jobDto == null)
         return Results.BadRequest("Job data is required.");
@@ -70,12 +70,12 @@ app.MapPost("/jobs", async ([FromBody]JobDto jobDto, IJobApplicationService _job
     //TO-DO: Return proper response with job id or status
     //TO-DO: Log the request and response
     //TO-DO: Create mapper between JobDto and JobEntity
-    JobEntity jobEntity = new JobEntity(jobDto.Description);
+    JobEntity jobEntity = new(jobDto.Description!);
     var result = await _jobService.PublishAsync(jobEntity);
     if(!result)
         return Results.StatusCode(500);
 
-    return Results.Created("/jobs", null);
+    return Results.Created("/jobs", jobDto);
 });
 
 #endregion

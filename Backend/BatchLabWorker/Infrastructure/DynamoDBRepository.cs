@@ -1,5 +1,6 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using BatchLabWorker.Domain;
 using System.Threading.Tasks;
 
 public class DynamoDBRepository
@@ -12,24 +13,24 @@ public class DynamoDBRepository
         _dynamoDbClient = dynamoDbClient;
     }
 
-    public async Task UpdateJobStatusAsync(string jobId, string status)
+    public async Task UpdateJobStatusAsync(JobEntity job)
     {
         var updateItemRequest = new UpdateItemRequest
         {
             TableName = TableName,
             Key = new Dictionary<string, AttributeValue>
             {
-                { "Id", new AttributeValue { S = jobId } }
+                { "Id", new AttributeValue { S = job.Id.ToString() } }
             },
-            UpdateExpression = "SET #s = :status",
             ExpressionAttributeNames = new Dictionary<string, string>
             {
                 { "#s", "Status" }
             },
             ExpressionAttributeValues = new Dictionary<string, AttributeValue>
             {
-                { ":status", new AttributeValue { S = status } }
-            }
+                { ":status", new AttributeValue { S = job.Status } }
+            },
+            UpdateExpression = "SET #s = :status"
         };
 
         await _dynamoDbClient.UpdateItemAsync(updateItemRequest);
