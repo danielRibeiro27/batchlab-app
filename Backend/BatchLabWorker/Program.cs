@@ -62,6 +62,7 @@ static void FakeProcessJob(JobEntity jobData)
     //Simulate job processing time
     Random rand = new Random();
     int processingTime = rand.Next(1000, 50000); //Random processing time between 1-50 seconds
+    // TODO: Replace Thread.Sleep with await Task.Delay() to properly support async operations
     System.Threading.Thread.Sleep(processingTime);
     Console.WriteLine($"Processed job: {jobData} in {processingTime} ms");
 
