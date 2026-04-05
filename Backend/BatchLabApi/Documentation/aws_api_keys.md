@@ -12,12 +12,13 @@ Use these ambient variables for storing the api keys
     `
 
 # Heading 2
-You can use the folowwing commands for running on a ambient that has the keys
-    `
+You can use the folowwing commands for running on a ambient that has the keys`:
+
+    ```
     --run api
     export AWS_ACCESS_KEY_ID=$BATCHLAB_API_AWS_ACCESS_KEY_ID
     export AWS_SECRET_ACCESS_KEY=$BATCHLAB_API_AWS_SECRET_ACCESS_KEY
-
+    
     dotnet run --project BatchLabApi/BatchLabApi.csproj
 
     --run worker
@@ -25,4 +26,4 @@ You can use the folowwing commands for running on a ambient that has the keys
     export AWS_SECRET_ACCESS_KEY=$BATCHLAB_WORKER_AWS_SECRET_ACCESS_KEY
 
     dotnet run --project BatchLabWorker/BatchLabWorker.csproj
-    `
+    ```
